@@ -1,0 +1,10 @@
+figura1{
+    a = circle(1,1,1){
+        color:Blue;
+        hidden:False;
+    }
+    b = square(1,1,1){
+        color:Red;
+        hidden:True;
+    }
+}

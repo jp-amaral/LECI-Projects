@@ -1,0 +1,377 @@
+module(stat) ::=<<
+#!/usr/bin/python3
+import pygame as py
+import pygame
+import random
+import math
+
+pygame.font.init()
+
+fps = 100 
+clock = py.time.Clock()
+run = True
+drawstringlllll_ = False
+
+WHITE_ = (255,255,255)
+BLACK_ = (0,0,0)
+BLUE_ = (0,0,255)
+YELLOW_ = (255,255,0)
+RED_ = (255,0,0) 
+GREEN_ = (0,255,0)
+GRAY_ = (155,155,155)
+ORANGE_ = (255,128,0)
+PURPLE_ = (128,0,128)
+
+
+class Circle:
+    def __init__(self,x,y,r):
+        self.r = r
+        self.x = x
+        self.y = y
+        self.hidden = False
+        self.thickness = 1
+        self.filled = False
+        self.color = WHITE_
+
+    def translate(self,x,y):
+        self.x = self.x + x
+        self.y = self.y  + y
+
+    def rotate(self, angle, xc, yc):
+        angle = math.radians(angle)
+        cos = math.cos(angle)
+        sin = math.sin(angle)
+        temp =  (self.x-xc)*cos - (self.y-yc)*sin + xc
+        self.y = (self.x-xc)*sin + (self.y-yc)*cos + yc
+        self.x = temp
+
+    def collideEdge(self, sizex, sizey):
+        p1 = self.x+self.r
+        p2 = self.y+self.r
+        p3 = self.x-self.r
+        p4 = self.y-self.r
+        if(p1 >= sizex or p2 >= sizey or p3 \<= 0 or p4 \<= 0):
+            return True
+        else:
+            return False
+
+    def getRect(self):
+        if (self.hidden == False):
+            return pygame.Rect(self.x - self.r + 0.25*self.r, self.y - self.r + self.r*0.25, self.r*2 - self.r*0.25, self.r*2 - self.r*0.25)
+
+    def update(self):
+        self.x = self.x
+        self.y = self.y
+        self.r = self.r
+
+class Line:
+    def __init__(self, x1,y1,x2,y2):
+        self.x1 = x1
+        self.y1 = y1
+        self.x2 = x2
+        self.y2 = y2
+        self.color = WHITE_
+        self.hidden = False
+        self.thickness = 1
+        self.distance = math.floor(math.dist([self.x1, self.y1], [self.x2, self.y2]))
+
+    def translate(self, x, y):
+        self.x1 = self.x1 + x
+        self.x2 = self.x2 + x
+        self.y1 = self.y1 + y
+        self.y2 = self.y2 + y
+
+    def rotate(self, angle, xc, yc):
+        angle = math.radians(angle)
+        cos = math.cos(angle)
+        sin = math.sin(angle)
+        temp =  (self.x2-xc)*cos - (self.y2-yc)*sin + xc
+        self.y2 = (self.x2-xc)*sin + (self.y2-yc)*cos + yc
+        self.x2 = temp
+        temp =  (self.x1-xc)*cos - (self.y1-yc)*sin + xc
+        self.y1 = (self.x1-xc)*sin + (self.y1-yc)*cos + yc
+        self.x1 = temp
+
+    def collideEdge(self, sizex, sizey):
+        if(self.x1 >= sizex or self.x1 \<= 0 or self.x2 >= sizex or self.x2 \<= 0 or self.y1 >= sizey or self.y1 \<= 0 or self.y2 >= sizey or self.y2 \<= 0):
+            return True
+        else:
+            return False
+
+class Square:
+    def __init__(self, x, y, w, h):
+        self.x1 = x
+        self.y1 = y
+        self.x2 = x+w
+        self.y2 = y
+        self.x3 = x+w
+        self.y3 = y+h
+        self.x4 = x
+        self.y4 = y+h
+        self.w = w
+        self.h = h
+        self.points = ((self.x1,self.y1),(self.x2,self.y2),(self.x3,self.y3),(self.x4,self.y4))
+        self.color = WHITE_
+        self.hidden = False
+        self.filled = False
+        self.thickness = 1
+    
+    def translate(self, x,y):
+        self.x1 = self.x1 + x
+        self.y1 = self.y1 + y
+        self.x2 = self.x2 + x
+        self.y2 = self.y2 + y
+        self.x3 = self.x3 + x
+        self.y3 = self.y3 + y
+        self.x4 = self.x4 + x
+        self.y4 = self.y4 + y
+        self.points = ((self.x1,self.y1),(self.x2,self.y2),(self.x3,self.y3),(self.x4,self.y4))
+
+    def rotate(self, angle, xc, yc):
+        angle = math.radians(angle)
+        cos = math.cos(angle)
+        sin = math.sin(angle)
+        temp =  (self.x2-xc)*cos - (self.y2-yc)*sin + xc
+        self.y2 = (self.x2-xc)*sin + (self.y2-yc)*cos + yc
+        self.x2 = temp
+        temp =  (self.x1-xc)*cos - (self.y1-yc)*sin + xc
+        self.y1 = (self.x1-xc)*sin + (self.y1-yc)*cos + yc
+        self.x1 = temp
+        temp =  (self.x3-xc)*cos - (self.y3-yc)*sin + xc
+        self.y3 = (self.x3-xc)*sin + (self.y3-yc)*cos + yc
+        self.x3 = temp
+        temp =  (self.x4-xc)*cos - (self.y4-yc)*sin + xc
+        self.y4 = (self.x4-xc)*sin + (self.y4-yc)*cos + yc
+        self.x4 = temp
+        self.points = ((self.x1,self.y1),(self.x2,self.y2),(self.x3,self.y3),(self.x4,self.y4))
+    
+    def update(self):
+        self.points = ((self.x1,self.y1),(self.x2,self.y2),(self.x3,self.y3),(self.x4,self.y4))
+    
+    def collideEdge(self, sizex, sizey):
+        if(self.x1 >= sizex or self.x1 \<= 0 or self.x2 >= sizex or self.x2 \<= 0 or self.x3 >= sizex or self.x3 \<= 0 or self.x4 >= sizex or self.x4 \<= 0 or self.y1 >= sizey or self.y1 \<= 0 or self.y2 >= sizey or self.y2 \<= 0 or self.y3 >= sizey or self.y3 \<= 0 or self.y4 >= sizey or self.y4 \<= 0):
+            return True
+        else:
+            return False
+
+    def getRect(self):
+        if (self.hidden == False):
+            return pygame.Rect(self.x1, self.y1, self.w, self.h)
+
+class Triangle:
+    def __init__(self, x, y, x2, y2, x3, y3):
+            self.x1 = x3
+            self.y1 = y3
+            self.x2 = x
+            self.y2 = y
+            self.x3 = x2
+            self.y3 = y2
+            self.points = ((self.x1,self.y1),(self.x2,self.y2),(self.x3,self.y3))
+            self.hidden = False
+            self.thickness = 1
+            self.filled = False
+            self.color = WHITE_
+        
+    def translate(self, x,y):
+        self.x1 = self.x1 + x
+        self.y1 = self.y1 + y
+        self.x2 = self.x2 + x
+        self.y2 = self.y2 + y
+        self.x3 = self.x3 + x
+        self.y3 = self.y3 + y
+        self.points = ((self.x1,self.y1),(self.x2,self.y2),(self.x3,self.y3))
+
+    def rotate(self, angle, xc, yc):
+        angle = math.radians(angle)
+        cos = math.cos(angle)
+        sin = math.sin(angle)
+        temp =  (self.x2-xc)*cos - (self.y2-yc)*sin + xc
+        self.y2 = (self.x2-xc)*sin + (self.y2-yc)*cos + yc
+        self.x2 = temp
+        temp =  (self.x1-xc)*cos - (self.y1-yc)*sin + xc
+        self.y1 = (self.x1-xc)*sin + (self.y1-yc)*cos + yc
+        self.x1 = temp
+        temp =  (self.x3-xc)*cos - (self.y3-yc)*sin + xc
+        self.y3 = (self.x3-xc)*sin + (self.y3-yc)*cos + yc
+        self.x3 = temp
+        self.points = ((self.x1,self.y1),(self.x2,self.y2),(self.x3,self.y3))
+
+    def update(self):
+        self.points = ((self.x1,self.y1),(self.x2,self.y2),(self.x3,self.y3))
+
+    def collideEdge(self, sizex, sizey):
+        if(self.x1 >= sizex or self.x1 \<= 0 or self.x2 >= sizex or self.x2 \<= 0 or self.x3 >= sizex or self.x3 \<= 0 or self.y1 >= sizey or self.y1 \<= 0 or self.y2 >= sizey or self.y2 \<= 0 or self.y3 >= sizey or self.y3 \<= 0):
+            return True
+        else:
+            return False
+
+    def getRect(self):
+        if (self.hidden == False):
+            return pygame.draw.polygon(display, self.color, self.points, self.thickness)
+
+
+def figureCollision(a, b):
+    try:
+        return a.colliderect(b)
+    except:
+        return False
+
+internal_timer = 0
+
+<stats(stat)>
+
+>>
+
+stats(stat) ::=<<
+<if(stat)><stat; separator="\n"><endif>
+>>
+
+assign(stat, var,value) ::= <<
+<stats(stat)>
+<var> = <value>
+>>
+
+
+
+exit()::=<<
+break
+>>
+
+resetTimer() ::=<<
+internal_timer = -1
+>>
+
+rotateInterval(stat, maior, start, menor, end, var, angle, xc, yc) ::=<<
+<stats(stat)>
+if(internal_timer <maior>= <start> and internal_timer <menor> <end>):
+    <var>.rotate(<angle>, <xc>, <yc>)
+>>
+
+rotate(stat, var, angle, xc, yc) ::=<<
+<stats(stat)>
+<var>.rotate(<angle>, <xc>, <yc>)
+>>
+
+translate(stat, var, x, y) ::=<<
+<stats(stat)>
+<var>.translate(<x>, <y>)
+>>
+
+translateInterval(stat, maior, start, menor, end, var, x, y) ::=<<
+<stats(stat)>
+if(internal_timer <maior>= <start> and internal_timer <menor> <end>):
+    <var>.translate(<x>,<y>)
+>>
+
+color(stat,var,r,g,b) ::=<<
+<stats(stat)>
+<var> = (<r>,<g>,<b>)
+>>
+
+decl(var, value) ::=<<
+<var> = <value>
+>>
+
+input(var, stat_inside)::=<<
+try:
+    if eventos[0].type == pygame.KEYDOWN and eventos[0].key == pygame.K_<var>:
+        <stat_inside>
+except:
+    pass
+>>
+
+print(value) ::= <<
+print(<value>)
+>>
+
+createRectangle(var, x, y, w, h)::=<<
+<var> = Square(<x>,<y>, <w>, <h>)
+>>
+
+createTriangle(var, x1, y1, x2, y2, x3, y3)::=<<
+<var> = Triangle(<x1>,<y1>,<x2>,<y2>,<x3>,<y3>)
+>>
+
+createCircle(var, x, y, r) ::= <<
+<var> = Circle(<x>,<y>,<r>)
+>>
+
+createLine(var, x1, y1, x2,y2) ::= <<
+<var> = Line(<x1>,<y1>,<x2>,<y2>)
+>>
+
+conditional(stat, var, stat_true, stat_false) ::=<<
+<stats(stat)>
+if (<var>):
+    <stat_true>
+<if(stat_false)>
+else:
+    <stat_false>
+<endif>
+>>
+
+binaryExpression(stat, var, e1, op, e2)::=<<
+<stats(stat)>
+<decl(var, [e1," ",op," ",e2])>
+>>
+
+drawPolygon(var) ::=<<
+<var>.update()
+if(<var>.hidden == False):
+    pygame.draw.polygon(display, <var>.color, <var>.points, <var>.thickness)
+>>
+
+drawCircle(var) ::=<<
+if(<var>.hidden == False):
+    pygame.draw.circle(display,<var>.color,(<var>.x,<var>.y),<var>.r,<var>.thickness)
+>>
+
+drawLine(var) ::=<<
+if(<var>.hidden == False):
+    pygame.draw.line(display,<var>.color,(<var>.x1,<var>.y1),(<var>.x2,<var>.y2), <var>.thickness)
+>>
+
+
+
+display(x,y, name) ::=<<
+WIDTH  = <x>
+HEIGHT = <y>
+display = pygame.display.set_mode([WIDTH,HEIGHT])
+pygame.display.set_caption('<name>')
+
+>>
+
+displayString(x,y,text, color, size)::=<<
+contador__ = <text>
+if(isinstance(<text>, int)):
+    contador__ = str(<text>)
+
+font = pygame.font.Font('freesansbold.ttf', <size>)
+text = font.render(contador__, True, <color>, BLACK_)
+textRect = text.get_rect()
+textRect.center = (<x>, <y>)
+drawstringlllll_ = True
+>>
+
+forever(stat_inside)::=<<
+while(run):
+        clock.tick(fps)  
+        
+        eventos = pygame.event.get()
+        try:
+            if(eventos[0].type == 32787):
+                run = False
+        except:
+            pass
+        display.fill(BLACK_)
+
+        if(drawstringlllll_== True):
+            display.blit(text, textRect)
+
+        <stats(stat_inside)>
+
+        internal_timer = internal_timer + 1
+        pygame.display.update()
+pygame.quit()
+>>
+

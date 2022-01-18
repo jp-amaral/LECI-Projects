@@ -1,0 +1,1215 @@
+#!/usr/bin/python3
+import pygame as py
+import pygame
+import random
+import math
+
+fps = 100 
+clock = py.time.Clock()
+run = True
+
+WHITE_ = (255,255,255)
+BLACK_ = (0,0,0)
+BLUE_ = (0,0,255)
+YELLOW_ = (255,255,0)
+RED_ = (255,0,0) 
+GREEN_ = (0,255,0)
+GRAY_ = (155,155,155)
+
+    
+def figureCollision(a, b):
+    return a.colliderect(b)
+
+class Circle:
+    def __init__(self,x,y,r):
+        self.r = r
+        self.x = x
+        self.y = y
+        self.hidden = False
+        self.thickness = 1
+        self.filled = False
+        self.color = WHITE_
+
+    def translate(self,x,y):
+        self.x = self.x + x
+        self.y = self.y  + y
+
+    def rotate(self, angle, xc, yc):
+        angle = math.radians(angle)
+        cos = math.cos(angle)
+        sin = math.sin(angle)
+        temp =  (self.x-xc)*cos - (self.y-yc)*sin + xc
+        self.y = (self.x-xc)*sin + (self.y-yc)*cos + yc
+        self.x = temp
+
+    def collideEdge(self, sizex, sizey):
+        p1 = self.x+self.r
+        p2 = self.y+self.r
+        p3 = self.x-self.r
+        p4 = self.y-self.r
+        if(p1 >= sizex or p2 >= sizey or p3 <= 0 or p4 <= 0):
+            return True
+        else:
+            return False
+
+    def getRect(self):
+        return pygame.Rect(self.x - self.r + 0.25*self.r, self.y - self.r + self.r*0.25, self.r*2 - self.r*0.25, self.r*2 - self.r*0.25)
+
+class Line:
+    def __init__(self, x1,y1,x2,y2):
+        self.x1 = x1
+        self.y1 = y1
+        self.x2 = x2
+        self.y2 = y2
+        self.color = WHITE_
+        self.hidden = False
+        self.thickness = 1
+        self.distance = math.floor(math.dist([self.x1, self.y1], [self.x2, self.y2]))
+
+    def translate(self, x, y):
+        self.x1 = self.x1 + x
+        self.x2 = self.x2 + x
+        self.y1 = self.y1 + y
+        self.y2 = self.y2 + y
+
+    def rotate(self, angle, xc, yc):
+        angle = math.radians(angle)
+        cos = math.cos(angle)
+        sin = math.sin(angle)
+        temp =  (self.x2-xc)*cos - (self.y2-yc)*sin + xc
+        self.y2 = (self.x2-xc)*sin + (self.y2-yc)*cos + yc
+        self.x2 = temp
+        temp =  (self.x1-xc)*cos - (self.y1-yc)*sin + xc
+        self.y1 = (self.x1-xc)*sin + (self.y1-yc)*cos + yc
+        self.x1 = temp
+
+    def collideEdge(self, sizex, sizey):
+        if(self.x1 >= sizex or self.x1 <= 0 or self.x2 >= sizex or self.x2 <= 0 or self.y1 >= sizey or self.y1 <= 0 or self.y2 >= sizey or self.y2 <= 0):
+            return True
+        else:
+            return False
+
+class Square:
+    def __init__(self, x, y, w, h):
+        self.x1 = x
+        self.y1 = y
+        self.x2 = x+w
+        self.y2 = y
+        self.x3 = x+w
+        self.y3 = y+h
+        self.x4 = x
+        self.y4 = y+h
+        self.w = w
+        self.h = h
+        self.points = ((self.x1,self.y1),(self.x2,self.y2),(self.x3,self.y3),(self.x4,self.y4))
+        self.color = WHITE_
+        self.hidden = False
+        self.filled = False
+        self.thickness = 1
+
+    def translate(self, x,y):
+        self.x1 = self.x1 + x
+        self.y1 = self.y1 + y
+        self.x2 = self.x2 + x
+        self.y2 = self.y2 + y
+        self.x3 = self.x3 + x
+        self.y3 = self.y3 + y
+        self.x4 = self.x4 + x
+        self.y4 = self.y4 + y
+        self.points = ((self.x1,self.y1),(self.x2,self.y2),(self.x3,self.y3),(self.x4,self.y4))
+
+    def rotate(self, angle, xc, yc):
+        angle = math.radians(angle)
+        cos = math.cos(angle)
+        sin = math.sin(angle)
+        temp =  (self.x2-xc)*cos - (self.y2-yc)*sin + xc
+        self.y2 = (self.x2-xc)*sin + (self.y2-yc)*cos + yc
+        self.x2 = temp
+        temp =  (self.x1-xc)*cos - (self.y1-yc)*sin + xc
+        self.y1 = (self.x1-xc)*sin + (self.y1-yc)*cos + yc
+        self.x1 = temp
+        temp =  (self.x3-xc)*cos - (self.y3-yc)*sin + xc
+        self.y3 = (self.x3-xc)*sin + (self.y3-yc)*cos + yc
+        self.x3 = temp
+        temp =  (self.x4-xc)*cos - (self.y4-yc)*sin + xc
+        self.y4 = (self.x4-xc)*sin + (self.y4-yc)*cos + yc
+        self.x4 = temp
+        self.points = ((self.x1,self.y1),(self.x2,self.y2),(self.x3,self.y3),(self.x4,self.y4))
+
+    def update(self):
+        self.points = ((self.x1,self.y1),(self.x2,self.y2),(self.x3,self.y3),(self.x4,self.y4))
+
+    def collideEdge(self, sizex, sizey):
+        if(self.x1 >= sizex or self.x1 <= 0 or self.x2 >= sizex or self.x2 <= 0 or self.x3 >= sizex or self.x3 <= 0 or self.x4 >= sizex or self.x4 <= 0 or self.y1 >= sizey or self.y1 <= 0 or self.y2 >= sizey or self.y2 <= 0 or self.y3 >= sizey or self.y3 <= 0 or self.y4 >= sizey or self.y4 <= 0):
+            return True
+        else:
+            return False
+
+    def getRect(self):
+        self.update()
+        return pygame.Rect(self.x1, self.x2, self.w, self.h)
+
+class Triangle:
+    def __init__(self, x, y, x2, y2, x3, y3):
+            self.x1 = x3
+            self.y1 = y3
+            self.x2 = x
+            self.y2 = y
+            self.x3 = x2
+            self.y3 = y2
+            self.points = ((self.x1,self.y1),(self.x2,self.y2),(self.x3,self.y3))
+            self.hidden = False
+            self.thickness = 1
+            self.filled = False
+            self.color = WHITE_
+
+    def translate(self, x,y):
+        self.x1 = self.x1 + x
+        self.y1 = self.y1 + y
+        self.x2 = self.x2 + x
+        self.y2 = self.y2 + y
+        self.x3 = self.x3 + x
+        self.y3 = self.y3 + y
+        self.points = ((self.x1,self.y1),(self.x2,self.y2),(self.x3,self.y3))
+
+    def rotate(self, angle, xc, yc):
+        angle = math.radians(angle)
+        cos = math.cos(angle)
+        sin = math.sin(angle)
+        temp =  (self.x2-xc)*cos - (self.y2-yc)*sin + xc
+        self.y2 = (self.x2-xc)*sin + (self.y2-yc)*cos + yc
+        self.x2 = temp
+        temp =  (self.x1-xc)*cos - (self.y1-yc)*sin + xc
+        self.y1 = (self.x1-xc)*sin + (self.y1-yc)*cos + yc
+        self.x1 = temp
+        temp =  (self.x3-xc)*cos - (self.y3-yc)*sin + xc
+        self.y3 = (self.x3-xc)*sin + (self.y3-yc)*cos + yc
+        self.x3 = temp
+        self.points = ((self.x1,self.y1),(self.x2,self.y2),(self.x3,self.y3))
+
+    def update(self):
+        self.points = ((self.x1,self.y1),(self.x2,self.y2),(self.x3,self.y3))
+
+    def collideEdge(self, sizex, sizey):
+        if(self.x1 >= sizex or self.x1 <= 0 or self.x2 >= sizex or self.x2 <= 0 or self.x3 >= sizex or self.x3 <= 0 or self.y1 >= sizey or self.y1 <= 0 or self.y2 >= sizey or self.y2 <= 0 or self.y3 >= sizey or self.y3 <= 0):
+            return True
+        else:
+            return False
+
+    def getRect(self):
+        self.update()
+        return pygame.draw.polygon(display, teste3.color, self.points, teste3.thickness)
+
+internal_timer = 0
+
+WIDTH  = 900
+HEIGHT = 900
+display = pygame.display.set_mode([WIDTH,HEIGHT])
+
+circle1_ = Circle(26,26,25)
+square1_ = Square(400,400, 20, 20)
+square2_ = Square(200,16, 15, 15)
+square3_ = Square(400,16, 15, 15)
+square4_ = Square(600,16, 15, 15)
+square5_ = Square(800,16, 15, 15)
+teste1 = Square(400,400,20,20)
+teste2 = Circle(600,300,25)
+teste3 = Triangle(100,100, 100, 200, 200, 80)
+v1 = WHITE_
+square2_.color = v1
+v2 = True
+square2_.thickness = 0
+v3 = BLUE_
+square3_.color = v3
+v4 = True
+square3_.thickness = 0
+v5 = GRAY_
+square4_.color = v5
+v6 = True
+square4_.thickness = 0
+v7 = GREEN_
+square4_.color = v7
+v8 = True
+square4_.thickness = 0
+ORANGE_ = (255,165,0)
+v9 = ORANGE_
+square5_.color = v9
+v10 = True
+square5_.thickness = 0
+v11 = False
+square1_.hidden = v11
+v12 = YELLOW_
+square1_.color = v12
+v13 = 6
+square1_.thickness = v13
+v14 = RED_
+circle1_.color = v14
+v15 = True
+circle1_.thickness = 0
+v16 = False
+tocou_ = v16
+v17 = False
+tocou1_ = v17
+v18 = False
+tocou2_ = v18
+v19 = False
+tocou3_ = v19
+v20 = 4
+speed_ = v20
+v22 = 300
+v23 = 20
+v21 = v22 + v23
+yi_ = v21
+v24 = 0
+left_ = v24
+v25 = 1
+right_ = v25
+v26 = 0
+down_ = v26
+v27 = 0
+up_ = v27
+v28 = 0
+counter_ = v28
+v29 = False
+bonecoexists_ = v29
+while(run):
+        clock.tick(fps)  
+
+        eventos = pygame.event.get()
+        try:
+            if(eventos[0].type == 32787):
+                run = False
+        except:
+            pass
+        display.fill(BLACK_)
+
+        v30 = 0
+        v31 = 2
+        square2_.translate(v30, v31)
+        v32 = 0
+        v33 = 4
+        square3_.translate(v32, v33)
+        v34 = 0
+        v35 = 3
+        square4_.translate(v34, v35)
+        v36 = 0
+        v37 = 1
+        square5_.translate(v36, v37)
+        v39 = square2_.collideEdge(WIDTH, HEIGHT)
+        v40 = True
+        v38 = v39 == v40
+        if (v38):
+            v41 = random.randint(30,850)
+            rand1_ = v41
+            v44 = square2_.x1
+            v45 = -1
+            v43 = v44 * v45
+            v46 = rand1_
+            v42 = v43 + v46
+            v47 = -850
+            square2_.translate(v42, v47)
+
+        v49 = square3_.collideEdge(WIDTH, HEIGHT)
+        v50 = True
+        v48 = v49 == v50
+        if (v48):
+            v51 = random.randint(30,850)
+            rand1_ = v51
+            v54 = square3_.x1
+            v55 = -1
+            v53 = v54 * v55
+            v56 = rand1_
+            v52 = v53 + v56
+            v57 = -850
+            square3_.translate(v52, v57)
+
+        v59 = square4_.collideEdge(WIDTH, HEIGHT)
+        v60 = True
+        v58 = v59 == v60
+        if (v58):
+            v61 = random.randint(30,850)
+            rand1_ = v61
+            v64 = square4_.x1
+            v65 = -1
+            v63 = v64 * v65
+            v66 = rand1_
+            v62 = v63 + v66
+            v67 = -850
+            square4_.translate(v62, v67)
+
+        v69 = square5_.collideEdge(WIDTH, HEIGHT)
+        v70 = True
+        v68 = v69 == v70
+        if (v68):
+            v71 = random.randint(30,850)
+            rand1_ = v71
+            v74 = square5_.x1
+            v75 = -1
+            v73 = v74 * v75
+            v76 = rand1_
+            v72 = v73 + v76
+            v77 = -850
+            square5_.translate(v72, v77)
+
+        v81 = square1_.x3
+        v82 = square1_.x1
+        v80 = v81 - v82
+        v83 = 2
+        v79 = v80 / v83
+        v84 = square1_.x1
+        v78 = v79 + v84
+        xi_ = v78
+        v88 = square1_.y3
+        v89 = square1_.y1
+        v87 = v88 - v89
+        v90 = 2
+        v86 = v87 / v90
+        v91 = square1_.y1
+        v85 = v86 + v91
+        yi_ = v85
+        v93 = circle1_.x
+        v94 = xi_
+        v92 = v93 - v94
+        circuloXcentro_ = v92
+        v96 = circuloXcentro_
+        v97 = 0
+        v95 = v96 < v97
+        if (v95):
+            v99 = circuloXcentro_
+            v100 = -1
+            v98 = v99 * v100
+            circuloXcentro_ = v98
+
+        v102 = circle1_.y
+        v103 = yi_
+        v101 = v102 - v103
+        circuloYcentro_ = v101
+        v105 = circuloYcentro_
+        v106 = 0
+        v104 = v105 < v106
+        if (v104):
+            v108 = circuloYcentro_
+            v109 = -1
+            v107 = v108 * v109
+            circuloYcentro_ = v107
+
+        v110 = circle1_.r
+        raio_ = v110
+        v112 = square1_.x3
+        v113 = square1_.x1
+        v111 = v112 - v113
+        w_ = v111
+        v115 = square1_.y3
+        v116 = square1_.y1
+        v114 = v115 - v116
+        h_ = v114
+        v119 = w_
+        v120 = 2
+        v118 = v119 / v120
+        v121 = raio_
+        v117 = v118 + v121
+        primeiroif_ = v117
+        v124 = h_
+        v125 = 2
+        v123 = v124 / v125
+        v126 = raio_
+        v122 = v123 + v126
+        segundoif_ = v122
+        v128 = circuloXcentro_
+        v129 = primeiroif_
+        v127 = v128 > v129
+        if (v127):
+            v130 = True
+            bonecoexists_ = v130
+
+        v132 = circuloYcentro_
+        v133 = segundoif_
+        v131 = v132 > v133
+        if (v131):
+            v134 = True
+            bonecoexists_ = v134
+
+        v136 = circuloXcentro_
+        v138 = w_
+        v139 = 2
+        v137 = v138 / v139
+        v135 = v136 <= v137
+        if (v135):
+            v140 = False
+            bonecoexists_ = v140
+
+        v142 = circuloYcentro_
+        v144 = h_
+        v145 = 2
+        v143 = v144 / v145
+        v141 = v142 <= v143
+        if (v141):
+            v146 = False
+            bonecoexists_ = v146
+
+        v150 = circuloXcentro_
+        v152 = w_
+        v153 = 2
+        v151 = v152 / v153
+        v149 = v150 - v151
+        v155 = circuloXcentro_
+        v157 = w_
+        v158 = 2
+        v156 = v157 / v158
+        v154 = v155 - v156
+        v148 = v149 * v154
+        v161 = circuloYcentro_
+        v163 = h_
+        v164 = 2
+        v162 = v163 / v164
+        v160 = v161 - v162
+        v166 = circuloYcentro_
+        v168 = h_
+        v169 = 2
+        v167 = v168 / v169
+        v165 = v166 - v167
+        v159 = v160 * v165
+        v147 = v148 + v159
+        corner_ = v147
+        v171 = corner_
+        v173 = raio_
+        v174 = raio_
+        v172 = v173 * v174
+        v170 = v171 <= v172
+        if (v170):
+            v175 = False
+            bonecoexists_ = v175
+        else:
+            v176 = True
+            bonecoexists_ = v176
+
+        v180 = square2_.x3
+        v181 = square2_.x1
+        v179 = v180 - v181
+        v182 = 2
+        v178 = v179 / v182
+        v183 = square2_.x1
+        v177 = v178 + v183
+        xxi_ = v177
+        v187 = square2_.y3
+        v188 = square2_.y1
+        v186 = v187 - v188
+        v189 = 2
+        v185 = v186 / v189
+        v190 = square2_.y1
+        v184 = v185 + v190
+        yyi_ = v184
+        v192 = circle1_.x
+        v193 = xxi_
+        v191 = v192 - v193
+        circuloXcentro_ = v191
+        v195 = circuloXcentro_
+        v196 = 0
+        v194 = v195 < v196
+        if (v194):
+            v198 = circuloXcentro_
+            v199 = -1
+            v197 = v198 * v199
+            circuloXcentro_ = v197
+
+        v201 = circle1_.y
+        v202 = yyi_
+        v200 = v201 - v202
+        circuloYcentro_ = v200
+        v204 = circuloYcentro_
+        v205 = 0
+        v203 = v204 < v205
+        if (v203):
+            v207 = circuloYcentro_
+            v208 = -1
+            v206 = v207 * v208
+            circuloYcentro_ = v206
+
+        v209 = circle1_.r
+        raio_ = v209
+        v211 = square2_.x3
+        v212 = square2_.x1
+        v210 = v211 - v212
+        w_ = v210
+        v214 = square2_.y3
+        v215 = square2_.y1
+        v213 = v214 - v215
+        h_ = v213
+        v218 = w_
+        v219 = 2
+        v217 = v218 / v219
+        v220 = raio_
+        v216 = v217 + v220
+        primeiroif_ = v216
+        v223 = h_
+        v224 = 2
+        v222 = v223 / v224
+        v225 = raio_
+        v221 = v222 + v225
+        segundoif_ = v221
+        v227 = circuloXcentro_
+        v228 = primeiroif_
+        v226 = v227 > v228
+        if (v226):
+            v229 = False
+            tocou_ = v229
+
+        v231 = circuloYcentro_
+        v232 = segundoif_
+        v230 = v231 > v232
+        if (v230):
+            v233 = False
+            tocou_ = v233
+
+        v235 = circuloXcentro_
+        v237 = w_
+        v238 = 2
+        v236 = v237 / v238
+        v234 = v235 <= v236
+        if (v234):
+            v239 = True
+            tocou_ = v239
+
+        v241 = circuloYcentro_
+        v243 = h_
+        v244 = 2
+        v242 = v243 / v244
+        v240 = v241 <= v242
+        if (v240):
+            v245 = True
+            tocou_ = v245
+
+        v249 = circuloXcentro_
+        v251 = w_
+        v252 = 2
+        v250 = v251 / v252
+        v248 = v249 - v250
+        v254 = circuloXcentro_
+        v256 = w_
+        v257 = 2
+        v255 = v256 / v257
+        v253 = v254 - v255
+        v247 = v248 * v253
+        v260 = circuloYcentro_
+        v262 = h_
+        v263 = 2
+        v261 = v262 / v263
+        v259 = v260 - v261
+        v265 = circuloYcentro_
+        v267 = h_
+        v268 = 2
+        v266 = v267 / v268
+        v264 = v265 - v266
+        v258 = v259 * v264
+        v246 = v247 + v258
+        corner_ = v246
+        v270 = corner_
+        v272 = raio_
+        v273 = raio_
+        v271 = v272 * v273
+        v269 = v270 <= v271
+        if (v269):
+            v274 = True
+            tocou_ = v274
+        else:
+            v275 = False
+            tocou_ = v275
+
+        v279 = square3_.x3
+        v280 = square3_.x1
+        v278 = v279 - v280
+        v281 = 2
+        v277 = v278 / v281
+        v282 = square3_.x1
+        v276 = v277 + v282
+        xxi_ = v276
+        v286 = square3_.y3
+        v287 = square3_.y1
+        v285 = v286 - v287
+        v288 = 2
+        v284 = v285 / v288
+        v289 = square3_.y1
+        v283 = v284 + v289
+        yyi_ = v283
+        v291 = circle1_.x
+        v292 = xxi_
+        v290 = v291 - v292
+        circuloXcentro_ = v290
+        v294 = circuloXcentro_
+        v295 = 0
+        v293 = v294 < v295
+        if (v293):
+            v297 = circuloXcentro_
+            v298 = -1
+            v296 = v297 * v298
+            circuloXcentro_ = v296
+
+        v300 = circle1_.y
+        v301 = yyi_
+        v299 = v300 - v301
+        circuloYcentro_ = v299
+        v303 = circuloYcentro_
+        v304 = 0
+        v302 = v303 < v304
+        if (v302):
+            v306 = circuloYcentro_
+            v307 = -1
+            v305 = v306 * v307
+            circuloYcentro_ = v305
+
+        v308 = circle1_.r
+        raio_ = v308
+        v310 = square3_.x3
+        v311 = square3_.x1
+        v309 = v310 - v311
+        w_ = v309
+        v313 = square3_.y3
+        v314 = square3_.y1
+        v312 = v313 - v314
+        h_ = v312
+        v317 = w_
+        v318 = 2
+        v316 = v317 / v318
+        v319 = raio_
+        v315 = v316 + v319
+        primeiroif_ = v315
+        v322 = h_
+        v323 = 2
+        v321 = v322 / v323
+        v324 = raio_
+        v320 = v321 + v324
+        segundoif_ = v320
+        v326 = circuloXcentro_
+        v327 = primeiroif_
+        v325 = v326 > v327
+        if (v325):
+            v328 = False
+            tocou1_ = v328
+
+        v330 = circuloYcentro_
+        v331 = segundoif_
+        v329 = v330 > v331
+        if (v329):
+            v332 = False
+            tocou1_ = v332
+
+        v334 = circuloXcentro_
+        v336 = w_
+        v337 = 2
+        v335 = v336 / v337
+        v333 = v334 <= v335
+        if (v333):
+            v338 = True
+            tocou1_ = v338
+
+        v340 = circuloYcentro_
+        v342 = h_
+        v343 = 2
+        v341 = v342 / v343
+        v339 = v340 <= v341
+        if (v339):
+            v344 = True
+            tocou1_ = v344
+
+        v348 = circuloXcentro_
+        v350 = w_
+        v351 = 2
+        v349 = v350 / v351
+        v347 = v348 - v349
+        v353 = circuloXcentro_
+        v355 = w_
+        v356 = 2
+        v354 = v355 / v356
+        v352 = v353 - v354
+        v346 = v347 * v352
+        v359 = circuloYcentro_
+        v361 = h_
+        v362 = 2
+        v360 = v361 / v362
+        v358 = v359 - v360
+        v364 = circuloYcentro_
+        v366 = h_
+        v367 = 2
+        v365 = v366 / v367
+        v363 = v364 - v365
+        v357 = v358 * v363
+        v345 = v346 + v357
+        corner_ = v345
+        v369 = corner_
+        v371 = raio_
+        v372 = raio_
+        v370 = v371 * v372
+        v368 = v369 <= v370
+        if (v368):
+            v373 = True
+            tocou1_ = v373
+        else:
+            v374 = False
+            tocou1_ = v374
+
+        v378 = square4_.x3
+        v379 = square4_.x1
+        v377 = v378 - v379
+        v380 = 2
+        v376 = v377 / v380
+        v381 = square4_.x1
+        v375 = v376 + v381
+        xxi_ = v375
+        v385 = square4_.y3
+        v386 = square4_.y1
+        v384 = v385 - v386
+        v387 = 2
+        v383 = v384 / v387
+        v388 = square4_.y1
+        v382 = v383 + v388
+        yyi_ = v382
+        v390 = circle1_.x
+        v391 = xxi_
+        v389 = v390 - v391
+        circuloXcentro_ = v389
+        v393 = circuloXcentro_
+        v394 = 0
+        v392 = v393 < v394
+        if (v392):
+            v396 = circuloXcentro_
+            v397 = -1
+            v395 = v396 * v397
+            circuloXcentro_ = v395
+
+        v399 = circle1_.y
+        v400 = yyi_
+        v398 = v399 - v400
+        circuloYcentro_ = v398
+        v402 = circuloYcentro_
+        v403 = 0
+        v401 = v402 < v403
+        if (v401):
+            v405 = circuloYcentro_
+            v406 = -1
+            v404 = v405 * v406
+            circuloYcentro_ = v404
+
+        v407 = circle1_.r
+        raio_ = v407
+        v409 = square4_.x3
+        v410 = square4_.x1
+        v408 = v409 - v410
+        w_ = v408
+        v412 = square4_.y3
+        v413 = square4_.y1
+        v411 = v412 - v413
+        h_ = v411
+        v416 = w_
+        v417 = 2
+        v415 = v416 / v417
+        v418 = raio_
+        v414 = v415 + v418
+        primeiroif_ = v414
+        v421 = h_
+        v422 = 2
+        v420 = v421 / v422
+        v423 = raio_
+        v419 = v420 + v423
+        segundoif_ = v419
+        v425 = circuloXcentro_
+        v426 = primeiroif_
+        v424 = v425 > v426
+        if (v424):
+            v427 = False
+            tocou2_ = v427
+
+        v429 = circuloYcentro_
+        v430 = segundoif_
+        v428 = v429 > v430
+        if (v428):
+            v431 = False
+            tocou2_ = v431
+
+        v433 = circuloXcentro_
+        v435 = w_
+        v436 = 2
+        v434 = v435 / v436
+        v432 = v433 <= v434
+        if (v432):
+            v437 = True
+            tocou2_ = v437
+
+        v439 = circuloYcentro_
+        v441 = h_
+        v442 = 2
+        v440 = v441 / v442
+        v438 = v439 <= v440
+        if (v438):
+            v443 = True
+            tocou2_ = v443
+
+        v447 = circuloXcentro_
+        v449 = w_
+        v450 = 2
+        v448 = v449 / v450
+        v446 = v447 - v448
+        v452 = circuloXcentro_
+        v454 = w_
+        v455 = 2
+        v453 = v454 / v455
+        v451 = v452 - v453
+        v445 = v446 * v451
+        v458 = circuloYcentro_
+        v460 = h_
+        v461 = 2
+        v459 = v460 / v461
+        v457 = v458 - v459
+        v463 = circuloYcentro_
+        v465 = h_
+        v466 = 2
+        v464 = v465 / v466
+        v462 = v463 - v464
+        v456 = v457 * v462
+        v444 = v445 + v456
+        corner_ = v444
+        v468 = corner_
+        v470 = raio_
+        v471 = raio_
+        v469 = v470 * v471
+        v467 = v468 <= v469
+        if (v467):
+            v472 = True
+            tocou2_ = v472
+        else:
+            v473 = False
+            tocou2_ = v473
+
+        v477 = square5_.x3
+        v478 = square5_.x1
+        v476 = v477 - v478
+        v479 = 2
+        v475 = v476 / v479
+        v480 = square5_.x1
+        v474 = v475 + v480
+        xxi_ = v474
+        v484 = square5_.y3
+        v485 = square5_.y1
+        v483 = v484 - v485
+        v486 = 2
+        v482 = v483 / v486
+        v487 = square5_.y1
+        v481 = v482 + v487
+        yyi_ = v481
+        v489 = circle1_.x
+        v490 = xxi_
+        v488 = v489 - v490
+        circuloXcentro_ = v488
+        v492 = circuloXcentro_
+        v493 = 0
+        v491 = v492 < v493
+        if (v491):
+            v495 = circuloXcentro_
+            v496 = -1
+            v494 = v495 * v496
+            circuloXcentro_ = v494
+
+        v498 = circle1_.y
+        v499 = yyi_
+        v497 = v498 - v499
+        circuloYcentro_ = v497
+        v501 = circuloYcentro_
+        v502 = 0
+        v500 = v501 < v502
+        if (v500):
+            v504 = circuloYcentro_
+            v505 = -1
+            v503 = v504 * v505
+            circuloYcentro_ = v503
+
+        v506 = circle1_.r
+        raio_ = v506
+        v508 = square5_.x3
+        v509 = square5_.x1
+        v507 = v508 - v509
+        w_ = v507
+        v511 = square5_.y3
+        v512 = square5_.y1
+        v510 = v511 - v512
+        h_ = v510
+        v515 = w_
+        v516 = 2
+        v514 = v515 / v516
+        v517 = raio_
+        v513 = v514 + v517
+        primeiroif_ = v513
+        v520 = h_
+        v521 = 2
+        v519 = v520 / v521
+        v522 = raio_
+        v518 = v519 + v522
+        segundoif_ = v518
+        v524 = circuloXcentro_
+        v525 = primeiroif_
+        v523 = v524 > v525
+        if (v523):
+            v526 = False
+            tocou3_ = v526
+
+        v528 = circuloYcentro_
+        v529 = segundoif_
+        v527 = v528 > v529
+        if (v527):
+            v530 = False
+            tocou3_ = v530
+
+        v532 = circuloXcentro_
+        v534 = w_
+        v535 = 2
+        v533 = v534 / v535
+        v531 = v532 <= v533
+        if (v531):
+            v536 = True
+            tocou3_ = v536
+
+        v538 = circuloYcentro_
+        v540 = h_
+        v541 = 2
+        v539 = v540 / v541
+        v537 = v538 <= v539
+        if (v537):
+            v542 = True
+            tocou3_ = v542
+
+        v546 = circuloXcentro_
+        v548 = w_
+        v549 = 2
+        v547 = v548 / v549
+        v545 = v546 - v547
+        v551 = circuloXcentro_
+        v553 = w_
+        v554 = 2
+        v552 = v553 / v554
+        v550 = v551 - v552
+        v544 = v545 * v550
+        v557 = circuloYcentro_
+        v559 = h_
+        v560 = 2
+        v558 = v559 / v560
+        v556 = v557 - v558
+        v562 = circuloYcentro_
+        v564 = h_
+        v565 = 2
+        v563 = v564 / v565
+        v561 = v562 - v563
+        v555 = v556 * v561
+        v543 = v544 + v555
+        corner_ = v543
+        v567 = corner_
+        v569 = raio_
+        v570 = raio_
+        v568 = v569 * v570
+        v566 = v567 <= v568
+        if (v566):
+            v571 = True
+            tocou3_ = v571
+        else:
+            v572 = False
+            tocou3_ = v572
+
+        v576 = tocou_
+        v577 = tocou1_
+        v575 = v576 or v577
+        v578 = tocou2_
+        v574 = v575 or v578
+        v579 = tocou3_
+        v573 = v574 or v579
+        if (v573):
+            string1_ = "----------------------------"
+            string2_ = "you lose the game  with ..."
+            string3_ = "points!!!!"
+            print(string1_)
+            print(string2_)
+            print(counter_)
+            print(string3_)
+            print(string1_)
+            break
+
+        v580 = speed_
+        v581 = xi_
+        v582 = yi_
+        square1_.rotate(v580, v581, v582)
+        v584 = bonecoexists_
+        v585 = False
+        v583 = v584 == v585
+        if (v583):
+            v586 = random.randint(100,800)
+            xc_ = v586
+            v587 = random.randint(100,800)
+            yc_ = v587
+            v589 = square1_.x1
+            v590 = -1
+            v588 = v589 * v590
+            v592 = square1_.y1
+            v593 = -1
+            v591 = v592 * v593
+            square1_.translate(v588, v591)
+            v594 = xc_
+            v595 = yc_
+            square1_.translate(v594, v595)
+            v597 = counter_
+            v598 = 1
+            v596 = v597 + v598
+            counter_ = v596
+            print(counter_)
+            v600 = circle1_.r
+            v601 = 2
+            v599 = v600 + v601
+            circle1_.r = v599
+
+        v603 = circle1_.collideEdge(WIDTH, HEIGHT)
+        v604 = False
+        v602 = v603 == v604
+        if (v602):
+            v606 = left_
+            v607 = 1
+            v605 = v606 == v607
+            if (v605):
+                v609 = speed_
+                v610 = -1
+                v608 = v609 * v610
+                v611 = 0
+                circle1_.translate(v608, v611)
+
+            v613 = right_
+            v614 = 1
+            v612 = v613 == v614
+            if (v612):
+                v615 = speed_
+                v616 = 0
+                circle1_.translate(v615, v616)
+
+            v618 = down_
+            v619 = 1
+            v617 = v618 == v619
+            if (v617):
+                v620 = 0
+                v621 = speed_
+                circle1_.translate(v620, v621)
+
+            v623 = up_
+            v624 = 1
+            v622 = v623 == v624
+            if (v622):
+                v625 = 0
+                v627 = speed_
+                v628 = -1
+                v626 = v627 * v628
+                circle1_.translate(v625, v626)
+
+            try:
+                if eventos[0].type == pygame.KEYDOWN and eventos[0].key == pygame.K_UP:
+                    v629 = 0
+                    left_ = v629
+                    v630 = 0
+                    right_ = v630
+                    v631 = 0
+                    down_ = v631
+                    v632 = 1
+                    up_ = v632
+            except:
+                pass
+            try:
+                if eventos[0].type == pygame.KEYDOWN and eventos[0].key == pygame.K_DOWN:
+                    v633 = 0
+                    left_ = v633
+                    v634 = 0
+                    right_ = v634
+                    v635 = 1
+                    down_ = v635
+                    v636 = 0
+                    up_ = v636
+            except:
+                pass
+            try:
+                if eventos[0].type == pygame.KEYDOWN and eventos[0].key == pygame.K_LEFT:
+                    v637 = 1
+                    left_ = v637
+                    v638 = 0
+                    right_ = v638
+                    v639 = 0
+                    down_ = v639
+                    v640 = 0
+                    up_ = v640
+            except:
+                pass
+            try:
+                if eventos[0].type == pygame.KEYDOWN and eventos[0].key == pygame.K_RIGHT:
+                    v641 = 0
+                    left_ = v641
+                    v642 = 1
+                    right_ = v642
+                    v643 = 0
+                    down_ = v643
+                    v644 = 0
+                    up_ = v644
+            except:
+                pass
+            try:
+                if eventos[0].type == pygame.KEYDOWN and eventos[0].key == pygame.K_ESCAPE:
+                    break
+            except:
+                pass
+        else:
+            v645 = 0
+            left_ = v645
+            v646 = 0
+            right_ = v646
+            v647 = 0
+            down_ = v647
+            v648 = 0
+            up_ = v648
+            string1_ = "----------------------------"
+            string2_ = "you lose the game  with ..."
+            string3_ = "points!!!!"
+            print(string1_)
+            print(string2_)
+            print(counter_)
+            print(string3_)
+            print(string1_)
+            break
+
+        square1_.update()
+        # if(square1_.hidden == False):
+        #     pygame.draw.polygon(display, square1_.color, square1_.points, square1_.thickness)
+        square2_.update()
+        if(square2_.hidden == False):
+            pygame.draw.polygon(display, square2_.color, square2_.points, square2_.thickness)
+        square3_.update()
+        if(square3_.hidden == False):
+            pygame.draw.polygon(display, square3_.color, square3_.points, square3_.thickness)
+        square4_.update()
+        if(square4_.hidden == False):
+            pygame.draw.polygon(display, square4_.color, square4_.points, square4_.thickness)
+        square5_.update()
+        if(square5_.hidden == False):
+            pygame.draw.polygon(display, square5_.color, square5_.points, square5_.thickness)
+        if(circle1_.hidden == False):
+            pygame.draw.circle(display,circle1_.color,(circle1_.x,circle1_.y),circle1_.r,circle1_.thickness)
+        teste1.update()
+        pygame.draw.polygon(display, teste1.color, teste1.points, teste1.thickness)
+        pygame.draw.circle(display, teste2.color, (teste2.x, teste2.y), teste2.r, teste2.thickness)
+        teste3.update()
+        pygame.draw.polygon(display, teste3.color, teste3.points, teste3.thickness)
+
+        a = circle1_.getRect()
+        b = teste1.getRect()
+        c = teste2.getRect()
+        d = teste3.getRect()
+        q = figureCollision(a,b)
+        circ = figureCollision(a, c)
+        tri = figureCollision(a, d)
+        if(q):
+            break
+        if(circ):
+            break
+        if(tri):
+            break
+        
+        internal_timer = internal_timer + 1
+        pygame.display.update()
+pygame.quit()

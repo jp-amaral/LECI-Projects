@@ -1,0 +1,29 @@
+coelho{
+          circulo = circle(100,100,20){
+                    color:BLUE;
+                    filled:True;
+          }
+          circulo2 = circle(30,50,6){
+                    color:RED;
+                    thickness:op;
+          }
+}
+
+asdsaui{
+          raiz = circle(0,0,50){
+                    color:True;
+          }
+          aa = line(100,100,300,400){
+                    color:REDA;
+                    thickness:3;
+                    hidden:True;
+          }
+}
+
+casa{
+          aaaaa = square(400,400,100){
+                    color:GRAY;
+          }
+          telhado = triangle(400,400,450,300,500,400)
+          janela = rectangle(420,450,30,40)
+}

@@ -1,0 +1,16 @@
+display(800,800):"teste";
+
+importFigures;
+
+coelho.circulo/color -> BLUE;
+
+figure batata(
+          repete -> circle(0,0,30);
+);
+
+forever<<
+          coelho.circulo/r -> coelho.circulo/r + 1;
+          draw:coelho;
+          draw:batata;
+          draw:casa;
+>>;

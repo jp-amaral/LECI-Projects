@@ -1,0 +1,35 @@
+display(800,800):"Test2";
+//import "test_extra";
+
+b -> "ola eu sou o bruno";
+//console(b);
+
+//i -> 10;
+//a -> i + 2;
+//a -> BLUE + 1;
+//b -> GREEN * 10;
+figure figure1(
+          square1 -> square(200,150,100);
+          line1 -> line (100,100,50,50);
+          circle1 -> circle(10,10,10);
+);
+a->"yjggfhj";
+drawString(0,0,0):uggvuj->a;
+b -> a:collidesEdge;
+bla -> figure1:collides:figure1;
+//console(i);
+//console(variavel123);
+//console(figure1);
+//draw:figura1;
+forever<<
+    figure1:translate(1,0) from second 0 to 3;
+    figure1:translate(0,1) from second 3 to 5;
+    figure1:rotate(1,400,400) from second 5 to 7;
+    if(readTimer >= 7)<<
+        resetTimer;
+    >>;
+    //if(i = True)<<>>;
+    //while(4)<<>>;
+    //if(ola)<<>>;
+    draw:figure1;
+>>;

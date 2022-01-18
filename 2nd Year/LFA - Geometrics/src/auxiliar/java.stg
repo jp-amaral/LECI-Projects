@@ -1,0 +1,47 @@
+module(stat) ::=<<
+import java.util.*;
+
+class Output{
+
+          static HashMap\<String, ArrayList\<Figura> > mapa = new HashMap\<String, ArrayList\<Figura> >();
+          static ArrayList\<Figura> temp;
+          public static HashMap\<String, ArrayList\<Figura> > out (){
+                    read();
+                    return mapa;
+          }
+          public static void read(){
+                    <stats(stat)>
+          }
+}
+>>
+stats(stat) ::=<<
+<if(stat)><stat; separator="\n"><endif>
+>>
+
+createCircle(id, x, y, r)::=<<
+Circle <id> = new Circle ("<id>", <x>, <y>, <r>);
+>>
+
+createSquare(id, x, y, length)::=<<
+Square <id> = new Square ("<id>", <x>, <y>, <length>);
+>>
+
+createRect(id, x, y, lengthx, lengthy)::=<<
+Rectangle <id> = new Rectangle("<id>", <x>, <y>,<lengthx>,<lengthy>);
+>>
+
+createTriangle(id, x1, y1, x2, y2, x3, y3)::=<<
+Triangle <id> = new Triangle("<id>",<x1>,<y1>,<x2>,<y2>,<x3>,<y3>);
+>>
+
+createLine(id,x1, y1, x2, y2)::=<<
+Line <id> = new Line("<id>", <x1>, <y1> , <x2>, <y2>);
+>>
+
+putAttr(id, key, value)::=<<
+<id>.putAtribute("<key>", "<value>");
+>>
+
+putMap(id, fig)::=<<
+mapa.put("<id>", <fig>);
+>>
