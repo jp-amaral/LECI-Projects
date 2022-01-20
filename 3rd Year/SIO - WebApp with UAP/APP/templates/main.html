@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <title>SecurityApp</title>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <!--enable mobile device-->
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <!--fontawesome css-->
+      <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+      <!--bootstrap css-->
+      <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+      <!--animate css-->
+      <link rel="stylesheet" href="/static/css/animate-wow.css">
+      <!--main css-->
+      <link rel="stylesheet" href="/static/css/style.css">
+      <link rel="stylesheet" href="/static/css/bootstrap-select.min.css">
+      <link rel="stylesheet" href="/static/css/slick.min.css">
+      <link rel="stylesheet" href="/static/css/main.css">
+
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+      <!--responsive css-->
+      <link rel="stylesheet" href="/static/css/responsive.css">
+   </head>
+   <body>
+      <header id="header" class="top-head">
+         <!-- Static navbar -->
+         <body>
+            <div class="navigation">
+                <ul>
+                    <li>
+                        <a href="{{url_for('main')}}">
+                            <span class="icon"><i class="fa fa-home" aria-hidden="true"></i></span>
+                            <span class="title">Home</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{url}}">
+                           <span class="icon"><i class="fa fa-user" aria-hidden="true"></i></span>
+                           <span class="title">{{login}}</span>
+                       </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('create_product') }}">
+                           <span class="icon"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
+                           <span class="title">Create a product</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('settings')}}">
+                            <span class="icon"><i class="fa fa-cog" aria-hidden="true"></i></span>
+                            <span class="title">Settings</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('about')}}">
+                            <span class="icon"><i class="fa fa-question" aria-hidden="true"></i></span>
+                            <span class="title">About us</span>
+                        </a>
+                     </li>
+                </ul>
+            </div>
+            <div class="navUser">
+                <ul>
+                    <li>
+                        <a href="{{url2}}">
+                            <span class="userN">{{msg}}</span>
+                            <span class="title">{{user}}</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="loader-wrapper">
+                <span class="loader"><span class="loader-inner"></span></span>  
+            </div> 
+      </header>
+   
+      <div class="page-content-product">
+         <div class="main-product">
+            <div class="container">
+               <div class="row clearfix">
+                  <div class="find-box">
+                     <h1>Find your next <br>product now.</h1>
+                     <h4>It has never been easier.</h4>
+                     <div class="product-sh">
+                        <form action="{{url_for('search')}}" mehtod="post">
+                           <div class="col-sm-6">
+                              <div class="form-sh">
+                                    <input type="text" name="query" placeholder="{{query | safe }}">
+                              </div>
+                           </div>
+                           <div class="col-sm-3">
+                              <style> 
+                                 input[type=button], input[type=submit], input[type=reset] {
+                                   background-color: #005bbd;
+                                   border: none;
+                                   border-radius: 5px;
+                                   color: white;
+                                   padding: 16px 150px;
+                                   text-decoration: none;
+                                   margin: 4px 2px;
+                                   cursor: pointer;
+                                 }
+                             </style>  
+                              <input type="submit" value="Search">
+                           </div>
+                        </form>
+                     </div>
+                  </div>
+               </div>
+               <div class="row clearfix">
+                  <!--INSERT HERE--><form action={{url_for('productpage')}} method="post"><div class="col-lg-3 col-sm-6 col-md-3"><input type="hidden" name="image" value="1"><div class="box-img"><h4>Controller</h4><input type="image" width="250px" height="200px" src="static/product_images/dualsense-ps5-controller-white-accessory-front.jpg" alt="" /></div></a></div></form><form action={{url_for('productpage')}} method="post"><div class="col-lg-3 col-sm-6 col-md-3"><input type="hidden" name="image" value="3"><div class="box-img"><h4>White keyboard</h4><input type="image" width="250px" height="200px" src="static/product_images/MK2A3.jpg" alt="" /></div></a></div></form><form action={{url_for('productpage')}} method="post"><div class="col-lg-3 col-sm-6 col-md-3"><input type="hidden" name="image" value="4"><div class="box-img"><h4>Mouse</h4><input type="image" width="250px" height="200px" src="static/product_images/hx-features-mouse-pulsefire-surge.jpg" alt="" /></div></a></div></form><form action={{url_for('productpage')}} method="post"><div class="col-lg-3 col-sm-6 col-md-3"><input type="hidden" name="image" value="5"><div class="box-img"><h4>Cool table</h4><input type="image" width="250px" height="200px" src="static/product_images/30196853.jpg" alt="" /></div></a></div></form><form action={{url_for('productpage')}} method="post"><div class="col-lg-3 col-sm-6 col-md-3"><input type="hidden" name="image" value="6"><div class="box-img"><h4>Lamp</h4><input type="image" width="250px" height="200px" src="static/product_images/72189-large_default.jpg" alt="" /></div></a></div></form><form action={{url_for('productpage')}} method="post"><div class="col-lg-3 col-sm-6 col-md-3"><input type="hidden" name="image" value="7"><div class="box-img"><h4>Broken chair</h4><input type="image" width="250px" height="200px" src="static/product_images/41tCIsGV8UL.jpg" alt="" /></div></a></div></form><form action={{url_for('productpage')}} method="post"><div class="col-lg-3 col-sm-6 col-md-3"><input type="hidden" name="image" value="8"><div class="box-img"><h4>Piones</h4><input type="image" width="250px" height="200px" src="static/product_images/istockphoto-529648493-170667a.jpg" alt="" /></div></a></div></form><form action={{url_for('productpage')}} method="post"><div class="col-lg-3 col-sm-6 col-md-3"><input type="hidden" name="image" value="9"><div class="box-img"><h4>Manta verde</h4><input type="image" width="250px" height="200px" src="static/product_images/MPVC001-745x460.jpg" alt="" /></div></a></div></form><form action={{url_for('productpage')}} method="post"><div class="col-lg-3 col-sm-6 col-md-3"><input type="hidden" name="image" value="10"><div class="box-img"><h4>Bolas ping pong</h4><input type="image" width="250px" height="200px" src="static/product_images/istockphoto-544123572-612x612.jpg" alt="" /></div></a></div></form><form action={{url_for('productpage')}} method="post"><div class="col-lg-3 col-sm-6 col-md-3"><input type="hidden" name="image" value="11"><div class="box-img"><h4>Curso de C</h4><input type="image" width="250px" height="200px" src="static/product_images/maxresdefault.jpg" alt="" /></div></a></div></form><form action={{url_for('productpage')}} method="post"><div class="col-lg-3 col-sm-6 col-md-3"><input type="hidden" name="image" value="12"><div class="box-img"><h4>euu</h4><input type="image" width="250px" height="200px" src="static/product_images/horario.png" alt="" /></div></a></div></form>
+               </div>
+               
+            </div>
+         </div>
+      </div>
+     <script>
+         $(window).on("load", function(){
+             $(".loader-wrapper").fadeOut(1000);
+         });
+     </script>
+      <!--main js--> 
+      <script src="static/js/jquery-1.12.4.min.js"></script> 
+      <!--bootstrap js--> 
+      <script src="/static/js/bootstrap.min.js"></script> 
+      <script src="/static/js/bootstrap-select.min.js"></script>
+      <script src="/static/js/slick.min.js"></script> 
+      <script src="/static/js/wow.min.js"></script>
+      <!--custom js--> 
+      <script src="/static/js/custom.js"></script>
+   </body>
+</html>

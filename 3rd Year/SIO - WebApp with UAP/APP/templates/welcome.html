@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="/static/css/welcome.css">
+    </head>
+    <body>
+        <p id="welcome">Welcome to</p>
+        <a href="javascript:setTimeout(()=>{window. location = '{{ url_for('main') }}' },1000);"><button classname="button" id="btn" type="button">YourShop</button>
+        <script>
+            document.getElementById("btn").addEventListener('click',function(){
+                document.getElementById("btn").className = "welcomeslideup";
+                document.getElementById("welcome").className = "welcomeslideup";
+            });
+        </script>
+        </a>
+    </body>
+</html>

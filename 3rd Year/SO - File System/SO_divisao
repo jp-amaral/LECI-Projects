@@ -1,0 +1,44 @@
+Amaral   - 7, 12, 15, 20      = dif 3 + dif 2 + dif 5 + dif 7         = dif 17
+Bruno    - 6, 8, 24, 27       = dif 2 + dif 3 + dif 5 + dif 7         = dif 17
+Viegas   - 3, 5, 9, 19        = dif 4 + dif 4 + dif 3 + dif 6 + dif 2 = dif 19
+Henrique - 11, 17, 18, 26, 28 = dif 3 + dif 3 + dif 4 + dif 5 + dif 3 = dif 18
+Miguel   - 4, 13, 14, 16, 23  = dif 3 + dif 3 + dif 5 + dif 3 + dif 4 = dif 18
+Pedro    - 1, 2, 10, 22, 25   = dif 4 + dif 3 + dif 4 + dif 6 + dif 2 = dif 19
+
+mksofs
+    -soComputeDiskStructure()       - difficulty 4               1  PEDRO 
+    -soFillInSuperblock()           - difficulty 4               2  PEDRO
+    -soFillInInodeTable()           - difficulty 4               3  VIEGAS 
+    -soFillInRootDir()              - difficulty 3               4  MIGUEL   
+    -soFillInBitmapTable()          - difficulty 4               5  VIEGAS	x
+    -soZeroFreeDataBlocks()         - difficulty 2               6  BRUNO	X 
+
+ILayer/freeinodes
+    -soAllocInode()                 - difficulty 3               7  AMARAL	x
+    -soHideInode()                  - difficulty 3               8  BRUNO	X
+    -soUnqueueHiddenInode()         - difficulty 3               9  VIEGAS	x
+    -soFreeInode()                  - difficulty 3               10 PEDRO    X
+
+ILayer/freedatablocks
+    -soAllocDataBlock()             - difficulty 3               11 HENRIQUE X
+    -soFreeDataBlock()              - difficulty 2               12 AMARAL   X
+    -soReplenishFromCache()         - difficulty 3               13 MIGUEL   
+    -soReplenishFromBitmap()        - difficulty 5               14 MIGUEL   X
+    -soDeplete()                    - difficulty 5               15 AMARAL	x
+
+ILayer/inodeblocks
+   -soNewInode                      - difficulty 3               16 MIGUEL   
+   -soRemoveInode                   - difficulty 3               17 HENRIQUE
+   -soGetInodeBlock                 - difficulty 4               18 HENRIQUE
+   -soAllocInodeBlock               - difficulty 6               19 VIEGAS   X
+   -soFreeInodeBlocks               - difficulty 7               20 AMARAL	x
+   -soReadInodeBlock                - difficulty 2               21 VIEGAS	x
+   -soWriteInodeBlock               - difficulty 2               22 PEDRO
+
+ILayer/direntries
+     -soTraversePath                - difficulty 4               23 MIGUEL   x   
+     -soGetDirentry                 - difficulty 5               24 BRUNO	X
+     -soAddDirentry                 - difficulty 6               25 PEDRO    X
+     -soDeleteDirentry              - difficulty 5               26 HENRIQUE X
+     -soRenameDirentry              - difficulty 7               27 BRUNO	X	
+     -soCheckDirEmpty (int pih)     - difficulty 3               28 HENRIQUE X

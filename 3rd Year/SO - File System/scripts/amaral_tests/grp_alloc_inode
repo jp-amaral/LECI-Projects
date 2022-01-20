@@ -1,0 +1,8 @@
+cd ../../bin
+echo -e ""|./createDisk /tmp/dsk 1000
+echo -e ""|./mksofs -b /tmp/dsk
+
+for((i=0;i<60;i++))
+do
+    echo -e "ai\nq\n"|./testtool -q -q1 /tmp/dsk
+done

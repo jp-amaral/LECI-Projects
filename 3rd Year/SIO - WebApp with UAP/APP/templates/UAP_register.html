@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>UAP Register</title>
+	<link rel="stylesheet" type="text/css" href="/static/fontawesome/css/all.min.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/UAP_register.css">
+</head>
+<body>
+ <div class="container">
+ 	<div class="header">
+ 		<h1>UAP Register</h1>
+		<h3 style="color: red;">{{error}}</h3>
+ 	</div>
+ 	<div class="main">
+ 		<form action="{{url_for('register')}}" method="post">
+ 			<span>
+ 				<i class="fa fa-user"></i>
+ 				<input type="text" placeholder="Username" name="username">
+ 			</span><br>
+ 			<span>
+ 				<i class="fa fa-lock"></i>
+ 				<input type="password" placeholder="Password" name="password1">
+ 			</span><br>
+ 			<span>
+				<i class="fa fa-lock"></i>
+				<input type="password" placeholder="Confirm password" name="password2">
+			</span><br>
+			<span id="isto">
+				<i class="log_but"></i>
+				<input type="submit" value="Register">
+			</span>
+ 		</form>
+ 	</div>
+ </div>
+</body>
+</html>

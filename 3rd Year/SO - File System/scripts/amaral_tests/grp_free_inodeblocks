@@ -1,0 +1,15 @@
+cd ../../bin
+echo -e ""|./createDisk /tmp/dsk 1000
+echo -e ""|./mksofs -b /tmp/dsk
+
+echo -e "ai\nq\n"|./testtool -q -q1 /tmp/dsk
+echo -e "aib\n1\n1\nq\n"|./testtool -b -q1 /tmp/dsk
+echo -e "aib\n1\n5\nq\n"|./testtool -b -q1 /tmp/dsk
+echo -e "aib\n1\n6\nq\n"|./testtool -b -q1 /tmp/dsk
+echo -e "aib\n1\n261\nq\n"|./testtool -b -q1 /tmp/dsk
+echo -e "aib\n1\n262\nq\n"|./testtool -b -q1 /tmp/dsk
+echo -e "aib\n1\n517\nq\n"|./testtool -b -q1 /tmp/dsk
+echo -e "aib\n1\n518\nq\n"| ./testtool -b -q1 /tmp/dsk
+echo -e "aib\n1\n2822\nq\n"| ./testtool -b -q1 /tmp/dsk
+echo -e "aib\n1\n2823\nq\n"| ./testtool -b -q1 /tmp/dsk
+echo -e "sb\ni\n1\nq\n"| ./testtool -b -q1 /tmp/dsk

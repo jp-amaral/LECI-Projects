@@ -1,0 +1,19 @@
+cd ../../bin
+echo -e ""|./createDisk /tmp/dsk 1000
+echo -e ""|./mksofs -b /tmp/dsk
+
+echo -e "ade\n0\nbruno\n12\nq\n"|./testtool -b -q1 /tmp/dsk
+echo -e "ade\n0\nrumo_ao_20_sofs21_3ano_brunobraguescostalemos98221\n40\nq\n"|./testtool -b -q1 /tmp/dsk
+echo -e "gde\n0\nbruno\nq\n"|./testtool -q -q1 /tmp/dsk
+echo -e "gde\n0\nrumo_ao_20_sofs21_3ano_brunobraguescostalemos98221\nq\n"|./testtool -q -q1 /tmp/dsk
+echo -e "gde\n0\ndiretorio\nq\n"|./testtool -q -q1 /tmp/dsk
+
+# #show
+echo -e "sb\nd\n6\nq\n"|./testtool -g -q1 /tmp/dsk
+echo "-----------------------------------------------------------------------------------------------------"
+echo "- comandos[bin]: binAddDirentry(0, bruno, 12)                                                       -"
+echo "- comandos[bin]: binAddDirentry(0, rumo_ao_20_sofs21_3ano_brunobraguescostalemos98221, 40)          -"
+echo "- comandos:      grpGetDirentry(0, bruno) -> retorna 12                                             -"
+echo "- comandos:      grpGetDirentry(0, rumo_ao_20_sofs21_3ano_brunobraguescostalemos98221)-> retorna 40 -"
+echo "- comandos:      grpGetDirentry(0, diretorio) -> retorna Nill                                       -"
+echo "-----------------------------------------------------------------------------------------------------"

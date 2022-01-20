@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <title>SecurityApp</title>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <!--enable mobile device-->
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <!--fontawesome css-->
+      <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+      <!--bootstrap css-->
+      <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+      <!--animate css-->
+      <link rel="stylesheet" href="/static/css/animate-wow.css">
+      <!--main css-->
+      <link rel="stylesheet" href="/static/css/style.css">
+      <link rel="stylesheet" href="/static/css/bootstrap-select.min.css">
+      <link rel="stylesheet" href="/static/css/slick.min.css">
+      <link rel="stylesheet" href="/static/css/main.css">
+
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+
+      <!--responsive css-->
+      <link rel="stylesheet" href="/static/css/responsive.css">
+   </head>
+   <body>
+      <header id="header" class="top-head">
+         <!-- Static navbar -->
+         <body>
+            <div class="navigation">
+                <ul>
+                    <li>
+                        <a href="{{url_for('main')}}">
+                            <span class="icon"><i class="fa fa-home" aria-hidden="true"></i></span>
+                            <span class="title">Home</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{url}}">
+                           <span class="icon"><i class="fa fa-user" aria-hidden="true"></i></span>
+                           <span class="title">{{login}}</span>
+                       </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('create_product') }}">
+                           <span class="icon"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
+                           <span class="title">Create a product</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('settings')}}">
+                            <span class="icon"><i class="fa fa-cog" aria-hidden="true"></i></span>
+                            <span class="title">Settings</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('about')}}">
+                            <span class="icon"><i class="fa fa-question" aria-hidden="true"></i></span>
+                            <span class="title">About us</span>
+                        </a>
+                     </li>
+                </ul>
+            </div>
+            <div class="navUser">
+                <ul>
+                    <li>
+                        <a href="{{url2}}">
+                            <span class="userN">{{msg}}</span>
+                            <span class="title">{{user}}</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="loader-wrapper">
+                <span class="loader"><span class="loader-inner"></span></span>  
+            </div> 
+      </header>
+   
+      <div class="page-content-product">
+         <div class="main-product">
+            <div class="container">
+               <div class="row clearfix">
+                  <div class="find-box">
+                     <h1>Find your next <br>product now.</h1>
+                     <h4>It has never been easier.</h4>
+                     <div class="product-sh">
+                        <form action="{{url_for('search')}}" mehtod="post">
+                           <div class="col-sm-6">
+                              <div class="form-sh">
+                                    <input type="text" name="query" placeholder="{{query | safe }}">
+                              </div>
+                           </div>
+                           <div class="col-sm-3">
+                              <style> 
+                                 input[type=button], input[type=submit], input[type=reset] {
+                                   background-color: #005bbd;
+                                   border: none;
+                                   border-radius: 5px;
+                                   color: white;
+                                   padding: 16px 150px;
+                                   text-decoration: none;
+                                   margin: 4px 2px;
+                                   cursor: pointer;
+                                 }
+                             </style>  
+                              <input type="submit" value="Search">
+                           </div>
+                        </form>
+                     </div>
+                  </div>
+               </div>
+               <div class="row clearfix">
+                  <!--INSERT HERE-->
+               </div>
+               
+            </div>
+         </div>
+      </div>
+     <script>
+         $(window).on("load", function(){
+             $(".loader-wrapper").fadeOut(1000);
+         });
+     </script>
+      <!--main js--> 
+      <script src="static/js/jquery-1.12.4.min.js"></script> 
+      <!--bootstrap js--> 
+      <script src="/static/js/bootstrap.min.js"></script> 
+      <script src="/static/js/bootstrap-select.min.js"></script>
+      <script src="/static/js/slick.min.js"></script> 
+      <script src="/static/js/wow.min.js"></script>
+      <!--custom js--> 
+      <script src="/static/js/custom.js"></script>
+   </body>
+</html>

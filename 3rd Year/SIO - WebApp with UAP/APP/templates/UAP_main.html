@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>UAP</title>
+	<link rel="stylesheet" type="text/css" href="/static/fontawesome/css/all.min.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/UAP_main.css">
+</head>
+<body>
+ <div class="container">
+ 	<div class="header">
+ 		<h1>WELCOME TO UAP</h1>
+ 	</div>
+ 	<div class="main">
+        <form action="{{url_for('login')}}" method="post">
+			<span id="isto">
+				<i class="log_but"></i>
+				<input type="submit" value="Login" style="cursor: pointer;">
+			</span>
+ 		</form>
+         <form action="{{url_for('register')}}" method="post">
+			<span id="isto">
+				<i class="log_but"></i>
+				<input type="submit" value="Register" style="cursor: pointer;">
+			</span>
+ 		</form>
+ 	</div>
+ </div>
+</body>
+</html>

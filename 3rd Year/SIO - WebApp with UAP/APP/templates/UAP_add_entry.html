@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Add New Login</title>
+	<link rel="stylesheet" type="text/css" href="/static/fontawesome/css/all.min.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/UAP_login.css">
+</head>
+<body>
+ <div class="container">
+ 	<div class="header">
+ 		<h1>UAP</h1>
+		<h2>Add login entry</h2>
+		<h3 style="color: red">{{error}}</h3>
+ 	</div>
+ 	<div class="main">
+ 		<form action="{{url_for('add_entry')}}" method="post">
+ 			<span>
+ 				<i class="fa fa-user"></i>
+ 				<input type="text" placeholder="DNS" name="domain" required>
+ 			</span><br>
+			<span>
+				<i class="fa fa-user"></i>
+				<input type="text" placeholder="Username" name="username" required>
+			</span><br>
+ 			<span>
+ 				<i class="fa fa-lock"></i>
+ 				<input type="password" placeholder="Password" name="password" required>
+ 			</span><br>
+			 <div class="field btn">
+				<div class="btn-layer"></div>
+				<input type="submit" value="ADD">
+			 </div>
+
+ 		</form>
+ 	</div>
+ </div>
+</body>
+</html>

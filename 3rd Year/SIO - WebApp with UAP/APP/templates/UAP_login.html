@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>UAP login</title>
+	<link rel="stylesheet" type="text/css" href="/static/fontawesome/css/all.min.css">
+	<link rel="stylesheet" type="text/css" href="/static/css/UAP_login.css">
+</head>
+<body>
+ <div class="container">
+ 	<div class="header">
+		 <h1>UAP</h1>
+		 <h3 style="color: red;">{{error}}</h3>
+		<h2>Accessing service:</h2>
+		<span class = "Serviço">{{source}}</span>
+ 	</div>
+ 	<div class="main">
+ 		<form action="{{url_for('login')}}" method="post">
+ 			<span>
+ 				<i class="fa fa-user"></i>
+ 				<input type="text" placeholder="Username" name="username">
+ 			</span><br>
+ 			<span>
+ 				<i class="fa fa-lock"></i>
+ 				<input type="password" placeholder="Password" name="password">
+ 			</span>
+			<span>
+				<input type="password" value="{{source}}" name="source" hidden>
+			</span><br>
+			<span id="isto">
+				<i class="log_but"></i>
+				<input type="submit" value="login" name="login">
+			</span>
+ 		</form>
+ 	</div>
+ </div>
+</body>
+</html>

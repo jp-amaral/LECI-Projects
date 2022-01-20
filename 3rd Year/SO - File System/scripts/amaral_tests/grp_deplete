@@ -1,0 +1,25 @@
+cd ../../bin
+echo -e ""|./createDisk /tmp/dsk 1000
+echo -e ""|./mksofs -b /tmp/dsk
+
+for((i=0;i<60;i++))
+do
+    echo -e "adb\nq\n"|./testtool -b -q1 /tmp/dsk
+done
+
+for((i=0;i<60;i++))
+do
+    echo -e "fdb\n$i\nq\n"|./testtool -q -q1 /tmp/dsk
+done
+
+for((i=0;i<60;i++))
+do
+    echo -e "adb\nq\n"|./testtool -b -q1 /tmp/dsk
+done
+
+for((i=60;i<120;i++))
+do
+    echo -e "fdb\n$i\nq\n"|./testtool -q -q1 /tmp/dsk
+done
+
+echo -e "adb\nq\n"|./testtool -b -q1 /tmp/dsk

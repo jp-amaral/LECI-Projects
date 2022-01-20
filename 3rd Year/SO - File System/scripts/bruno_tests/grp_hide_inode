@@ -1,0 +1,26 @@
+cd ../../bin
+echo -e ""|./createDisk /tmp/dsk 1000
+echo -e ""|./mksofs -b  /tmp/dsk
+echo -e "fd\n128\nq\n"|./testtool -g -q1 /tmp/dsk
+i=1
+while [ $i -le 37 ]
+do
+  echo -e "hi\n$i\nq\n"|./testtool -g -q1 /tmp/dsk
+  ((i++))
+done
+
+
+echo -e "uhi\nq\n"|./testtool -b -q1 /tmp/dsk
+echo -e "hi\n37\nq\n"|./testtool -g -q1 /tmp/dsk
+
+# #show
+echo -e "sb\ns\n0\nq\n"|./testtool -g -q1 /tmp/dsk
+
+echo "-----------------------------------------------------------------------------------------------------------"
+echo "- comandos:      grpHideInode(1)         -> Inode number  1 insertion into the deleted queue: succeeded   -"
+echo "- comandos:      grpHideInode(2)         -> Inode number  2 insertion into the deleted queue: succeeded   -"
+echo "- comandos:      grpHideInode(...)       -> Inode number .. insertion into the deleted queue: succeeded   -"
+echo "- comandos:      grpHideInode(37)        -> Inode number 37 insertion into the deleted queue: fail        -"
+echo "- comandos[bin]: binUnqueueHiddenInode() -> Inode number 1 was removed from deleted queue                 -"
+echo "- comandos:      grpHideInode(37)        -> Inode number 37 insertion into the deleted queue: succeeded   -"
+echo "-----------------------------------------------------------------------------------------------------------"

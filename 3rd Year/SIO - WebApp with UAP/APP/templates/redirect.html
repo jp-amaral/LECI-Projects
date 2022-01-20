@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+    <head>
+        <meta charset="utf-8">
+        <title>Redirecting </title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+        <form action = 'http://{{source}}' method="post" id ="user_redirect" hidden>
+            <input type="text" value="{{user}}" name="username" hidden>
+            <input type="submit" hidden>
+        </form>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-1.7.1.min.js"></script>
+        <script>
+            window.onload = function(){
+                document.forms['user_redirect'].submit();
+            }
+        </script>
+    </body>
+</html>

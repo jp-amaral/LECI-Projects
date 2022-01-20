@@ -1,0 +1,29 @@
+cd ../../bin
+
+echo -e ""|./createDisk /tmp/dsk 1000
+echo -e ""|./mksofs -b -z /tmp/dsk
+
+echo -e "ade\n0\nbruno\n12\nq\n"|./testtool -b -q1 /tmp/dsk
+echo -e "ade\n0\nbatata\n17\nq\n"|./testtool -b -q1 /tmp/dsk
+echo -e "ade\n0\nrumo_ao_20_sofs21_3ano_brunobraguescostalemos98221\n40\nq\n"|./testtool -b -q1 /tmp/dsk
+echo -e "ade\n0\nPastadeexemploPastadeexemploPastadeexemploPasta\n37\nq\n"|./testtool -b -q1 /tmp/dsk
+
+
+echo -e "rde\n0\nbruno\ncenoura\nq\n"|./testtool -q -q1 /tmp/dsk
+echo -e "rde\n0\nrumo_ao_20_sofs21_3ano_brunobraguescostalemos98221\nSO_e_fixe\nq\n"|./testtool -q -q1 /tmp/dsk
+echo -e "rde\n0\ncenoura\nSistemaFicheirosSistemaFicheirosSistema\nq\n"|./testtool -q -q1 /tmp/dsk
+echo -e "rde\n0\nPastadeexemploPastadeexemploPastadeexemploPasta\ninformaticainformaticainformaticainformatica123\nq\n"|./testtool -q -q1 /tmp/dsk
+echo -e "rde\n0\nbatata\n12345678910111213141516171898989ola\nq\n"|./testtool -q -q1 /tmp/dsk
+# #show
+echo -e "sb\nd\n6\nq\n"|./testtool -g -q1 /tmp/dsk
+echo "-------------------------------------------------------------------------------------------------------------------------------------------"
+echo "- comandos[bin]: binAddDirentry(0, bruno, 12)                                                                                             -"
+echo "- comandos[bin]: binAddDirentry(0, batata, 17)                                                                                            -"
+echo "- comandos[bin]: binAddDirentry(0, rumo_ao_20_sofs21_3ano_brunobraguescostalemos98221, 40)                                                -"
+echo "- comandos[bin]: binAddDirentry(0, PastadeexemploPastadeexemploPastadeexemploPasta, 37)                                                   -"
+echo "- comandos:      grpRenameDirentry(0, bruno, cenoura)                                                                                     -"
+echo "- comandos:      grpRenameDirentry(0, rumo_ao_20_sofs21_3ano_brunobraguescostalemos98221, SO_e_fixe)                                      -"
+echo "- comandos:      grpRenameDirentry(0, cenoura, SistemaFicheirosSistemaFicheirosSistema)                                                   -"
+echo "- comandos:      grpRenameDirentry(0, PastadeexemploPastadeexemploPastadeexemploPasta, informaticainformaticainformaticainformatica123)   -"
+echo "- comandos:      grpRenameDirentry(0, batata, 12345678910111213141516171898989ola)                                                        -"
+echo "-------------------------------------------------------------------------------------------------------------------------------------------"

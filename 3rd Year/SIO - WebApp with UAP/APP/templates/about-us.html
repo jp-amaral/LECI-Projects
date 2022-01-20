@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="UTF-8">
+      <title>SecurityApp</title>
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <!--enable mobile device-->
+      <meta name="viewport" content="width=device-width, initial-scale=1">
+      <!--fontawesome css-->
+      <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+      <!--bootstrap css-->
+      <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+      <!--animate css-->
+      <link rel="stylesheet" href="/static/css/animate-wow.css">
+      <!--main css-->
+      <link rel="stylesheet" href="/static/css/style.css">
+      <link rel="stylesheet" href="/static/css/bootstrap-select.min.css">
+      <link rel="stylesheet" href="/static/css/slick.min.css">
+      <link rel="stylesheet" href="/static/css/main.css">
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+      <!--responsive css-->
+      <link rel="stylesheet" href="/static/css/responsive.css">
+   </head>
+   <body>
+      <header id="header" class="top-head">
+         <!-- Static navbar -->
+         <body>
+            <div class="navigation">
+                <ul>
+                    <li>
+                        <a href="{{ url_for('main')}}">
+                            <span class="icon"><i class="fa fa-home" aria-hidden="true"></i></span>
+                            <span class="title">Home</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('profile')}}">
+                           <span class="icon"><i class="fa fa-user" aria-hidden="true"></i></span>
+                           <span class="title">Profile</span>
+                       </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('create_product')}}">
+                           <span class="icon"><i class="fa fa-shopping-cart" aria-hidden="true"></i></span>
+                           <span class="title">Create a product</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('settings')}}">
+                            <span class="icon"><i class="fa fa-cog" aria-hidden="true"></i></span>
+                            <span class="title">Settings</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{ url_for('about')}}">
+                            <span class="icon"><i class="fa fa-question" aria-hidden="true"></i></span>
+                            <span class="title">About us</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="navUser">
+                <ul>
+                    <li>
+                        <a href="{{url2}}">
+                            <span class="userN">{{msg}}</span>
+                            <span class="title">{{user}}</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+            <div class="loader-wrapper">
+                <span class="loader"><span class="loader-inner"></span></span>  
+            </div> 
+            <script>
+                $(window).on("load", function(){
+                    $(".loader-wrapper").fadeOut(1000);
+                });
+            </script> 
+      </header>
+      <div class="main-template-about">
+            <div class="map"></div>
+            <div class="container">
+               <div class="row">
+                  <div class="col-lg-8 col-lg-offset-2">
+                     <div class="wow fadeIn" data-wow-delay="0.0s">
+                        <h1>About YourShop
+                        </h1>
+                        <p class="lead">YourShop is the world's leading classifieds platform, offering local communities in fast-growing markets a vibrant online marketplace. YourShop connects people to buy, sell or trade used items and services in a quick and easy way so anyone can post an ad over the phone or computer.
+
+Every month, hundreds of millions of people around the world use YourShop to find and sell a wide range of products, including computers, mobile phones, furniture, sporting goods, services, cars, real estate and more.
+                           <br>
+                           <br>
+                           Go sign up and get inspired!
+                        </p>
+                     </div>
+                     <div class="about-icons row">
+                        <div class="col-xs-4 wow fadeIn" data-wow-delay="0.0s"><img src="static/images/about-icon-1.png" alt=""/></div>
+                        <div class="col-xs-4 wow fadeIn" data-wow-delay="0.2s"><img src="static/images/about-icon-2.png" alt=""/></div>
+                        <div class="col-xs-4 wow fadeIn" data-wow-delay="0.4s"><img src="static/images/about-icon-3.png" alt=""/></div>
+                     </div>
+                  </div>
+            </div>
+         </div>
+      <!--main js--> 
+      <script src="/static/js/jquery-1.12.4.min.js"></script> 
+      <!--bootstrap js--> 
+      <script src="/static/js/bootstrap.min.js"></script> 
+      <script src="/static/js/bootstrap-select.min.js"></script>
+      <script src="/static/js/slick.min.js"></script> 
+      <script src="/static/js/wow.min.js"></script>
+      <!--custom js--> 
+      <script src="/static/js/custom.js"></script>
+   </body>
+</html>
+
+
+
+
+

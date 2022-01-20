@@ -1,0 +1,9 @@
+cd ../../bin
+echo -e ""|./createDisk /tmp/dsk 1000
+echo -e ""|./mksofs -g -z /tmp/dsk
+i=0
+while [ $i -le 999 ]
+do
+  echo -e "s\nx\n$i\nq\n"|./testtool -b -q1 /tmp/dsk
+  ((i++))
+done

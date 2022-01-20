@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>UAP Accounts</title>
+    <link rel="stylesheet" type="text/css" href="/static/fontawesome/css/all.min.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/UAP_login.css">
+</head>
+<body>
+ <div class="container">
+     <div class="header">
+         <h2>{{user}}'s accounts for {{domain}}</h2>
+     </div>
+     <div class="main">
+        <!--INSERT HERE--><form action="{{url_for('authentication')}}" method="post"><span><input type="text" name="source" value="127.0.0.1:5000"hidden><input type="submit" name="username" value="broca" style="cursor: pointer;" readonly><input type="hidden" name="source" value="127.0.0.1:5000"></span></form><form action="{{url_for('authentication')}}" method="post"><span><input type="text" name="source" value="127.0.0.1:5000"hidden><input type="submit" name="username" value="test" style="cursor: pointer;" readonly><input type="hidden" name="source" value="127.0.0.1:5000"></span></form><form action="{{url_for('authentication')}}" method="post"><span><input type="text" name="source" value="127.0.0.1:5000"hidden><input type="submit" name="username" value="naoexiste" style="cursor: pointer;" readonly><input type="hidden" name="source" value="127.0.0.1:5000"></span></form>
+     </div>
+ </div>
+</body>
+</html>
